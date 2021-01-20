@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ssh-gateway.fullname" . }}
+  labels:
+    {{- include "ssh-gateway.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "ssh-gateway.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "ssh-gateway.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.image.pullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "ssh-gateway.serviceAccountName" . }}
+      {{- if .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- end }}
+      volumes:
+        {{- with .Values.volumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        - name: ssh-key
+          secret:
+            secretName: {{ .Values.sshKey }}
+            defaultMode: 0400
+        - name: ssh-config
+          configMap:
+            name: {{ .Values.sshConfig }}
+            defaultMode: 0400
+        {{- if .Values.sshKnownHosts }}
+        - name: ssh-known-hosts
+          configMap:
+            name: {{ .Values.sshKnownHosts }}
+            defaultMode: 0400
+        {{- end }}
+      containers:
+        - name: {{ .Values.app }}
+          command:
+            - ssh
+          args:
+            - "-4"
+            - -N
+            - -L
+            - "{{- .Values.containerPort }}:{{- .Values.server.hostname }}:{{- if .Values.server.port -}}
+                 {{- .Values.server.port }}
+               {{- else -}}
+                 {{- .Values.containerPort }}
+               {{- end }}"
+            - {{ .Values.destination }}
+          {{- if .Values.securityContext -}}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          {{- end }}
+          image: "{{- if .Values.image.registry }}
+            {{- .Values.image.registry }}/
+            {{- end }}{{- .Values.image.repository }}:{{- .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: {{ .Values.containerPortName }}
+              containerPort: {{ .Values.containerPort }}
+              protocol: TCP
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12  }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{ toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if .Values.resources -}}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+          {{- with .Values.env }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            {{- with .Values.volumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            - mountPath: /ssh-id-rsa
+              name: ssh-key
+            - mountPath: /ssh-config
+              name: ssh-config
+            {{- if .Values.sshKnownHosts }}
+            - mountPath: /ssh-known-hosts
+              name: ssh-known-hosts
+            {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}

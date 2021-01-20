@@ -1,0 +1,44 @@
+# -- Extra labels for your something
+additionalLabels: {}
+# -- Extra selectors for your something
+selectorLabels: {}
+service:
+  # -- Annotations service
+  annotations:
+serviceAccount:
+  # -- Whether/or not to create a service account
+  create: true
+image:
+  # -- Image registry
+  registry: docker.io
+  # -- Image name
+  repository: garner-ssh-gateway
+  # -- Image pull policy
+  pullPolicy: IfNotPresent
+  # -- Specify docker-registry secret names as an array
+  pullSecrets: {}
+  # -- Image tag
+  tag: 0.0.1
+server:
+  # -- Hostname reachable from destination containing service to forward
+  hostname: 127.0.0.1
+  # -- Port of service being forwarded
+  port:
+# -- Name for exposed port forward
+containerPortName:
+# -- Port number for port forward
+containerPort:
+# -- Name for your app
+app:
+# -- Remote host to which ssh should connect
+destination:
+# -- SSH key (.ssh/id_rsa)
+sshKey:
+# -- SSH config (.ssh/config)
+sshConfig:
+# -- SSH known hosts (.ssh/known_hosts)
+sshKnownHosts:
+# -- String to partially override common.names.fullname template with a string (will prepend the release name)
+nameOverride:
+# -- Chart name override
+fullnameOverride:
