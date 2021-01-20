@@ -1,0 +1,13 @@
+steps:
+  - id: dockerize-garner-ssh-gateway
+    name: 'gcr.io/cloud-builders/docker'
+    args:
+      - build
+      - '-t'
+      - gcr.io/$PROJECT_ID/garner-ssh-gateway:$COMMIT_SHA
+      - '-t'
+      - gcr.io/$PROJECT_ID/garner-ssh-gateway:latest
+      - .
+images:
+  - gcr.io/$PROJECT_ID/garner-ssh-gateway:$COMMIT_SHA
+  - gcr.io/$PROJECT_ID/garner-ssh-gateway:latest
