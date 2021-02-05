@@ -41,6 +41,8 @@ These commands deploy an ssh pod on the Kubernetes cluster in the default config
 | app | string | `nil` | Name for your app |
 | containerPort | string | `nil` | Port number for port forward |
 | containerPortName | string | `nil` | Name for exposed port forward |
+| deployment.annotations | string | `nil` | Deployment annotations |
+| deployment.podAnnotations | string | `nil` | Pod annotations |
 | destination | string | `nil` | Remote host to which ssh should connect |
 | fullnameOverride | string | `nil` | Chart name override |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |

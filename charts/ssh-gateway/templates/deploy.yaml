@@ -1,6 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  {{ if .Values.deployment.annotations -}}
+  annotations:
+    {{- with .Values.deployment.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}
   name: {{ include "ssh-gateway.fullname" . }}
   labels:
     {{- include "ssh-gateway.labels" . | nindent 4 }}
@@ -10,6 +16,12 @@ spec:
       {{- include "ssh-gateway.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      {{ if .Values.deployment.podAnnotations -}}
+      annotations:
+        {{- with .Values.deployment.podAnnotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
       labels:
         {{- include "ssh-gateway.selectorLabels" . | nindent 8 }}
     spec:

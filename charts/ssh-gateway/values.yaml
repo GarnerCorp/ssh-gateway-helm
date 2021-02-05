@@ -1,5 +1,10 @@
 # -- Extra labels for your something
 additionalLabels: {}
+deployment:
+  # -- Deployment annotations
+  annotations: {}
+  # -- Pod annotations
+  podAnnotations: {}
 # -- Extra selectors for your something
 selectorLabels: {}
 service:
