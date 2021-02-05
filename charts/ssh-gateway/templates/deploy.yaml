@@ -48,7 +48,7 @@ spec:
             - "-4"
             - -N
             - -L
-            - "{{- .Values.containerPort }}:{{- .Values.server.hostname }}:{{- if .Values.server.port -}}
+            - "*:{{- .Values.containerPort }}:{{- .Values.server.hostname }}:{{- if .Values.server.port -}}
                  {{- .Values.server.port }}
                {{- else -}}
                  {{- .Values.containerPort }}
