@@ -1,3 +1,4 @@
 ignore$
 ^LICENSE
 ^\.github/
+^\Q.secrets.baseline\E$
