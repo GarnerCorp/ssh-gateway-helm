@@ -44,9 +44,9 @@ jobs:
           platforms: ${{ env.PLATFORMS }}
           image-name: ${{ env.image_name }}
           additional-image-tags: >-
-            ${{ github.event_name == 'push' && format('{0}/{1}:latest', secrets.ARTIFACT_REPOSITORY_1, env.image_name) || '' }}
-            ${{ github.event_name == 'push' && format('{0}/{1}:latest', secrets.ARTIFACT_REPOSITORY_2, env.image_name) || '' }}
-            ${{ github.event_name == 'push' && format('{0}/{1}:prod-{2}', secrets.ARTIFACT_REPOSITORY_1, env.image_name, github.sha) || '' }}
-            ${{ github.event_name == 'push' && format('{0}/{1}:prod-{2}', secrets.ARTIFACT_REPOSITORY_2, env.image_name, github.sha) || '' }}
             ${{ secrets.ARTIFACT_REPOSITORY_1 }}/${{ env.image_name }}:rc-${{ github.sha }}
-            ${{ secrets.ARTIFACT_REPOSITORY_2 }}/${{ env.image_name }}:rc-${{ github.sha }}
+            ${{ github.event_name == 'push' && format('{0}/{1}:prod-{2}', secrets.ARTIFACT_REPOSITORY_1, env.image_name, github.sha) || '' }}
+            ${{ github.event_name == 'push' && format('{0}/{1}:latest', secrets.ARTIFACT_REPOSITORY_1, env.image_name) || '' }}
+            ${{ secrets.ARTIFACT_REPOSITORY_2 && format('{0}/{1}:rc-{2}', secrets.ARTIFACT_REPOSITORY_2, env.image_name, github.sha) || ''}}
+            ${{ secrets.ARTIFACT_REPOSITORY_2 && github.event_name == 'push' && format('{0}/{1}:prod-{2}', secrets.ARTIFACT_REPOSITORY_2, env.image_name, github.sha) || '' }}
+            ${{ secrets.ARTIFACT_REPOSITORY_2 && github.event_name == 'push' && format('{0}/{1}:latest', secrets.ARTIFACT_REPOSITORY_2, env.image_name) || '' }}
