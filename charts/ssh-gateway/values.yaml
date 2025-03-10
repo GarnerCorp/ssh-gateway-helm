@@ -15,7 +15,7 @@ serviceAccount:
   create: true
 image:
   # -- Image registry
-  registry: docker.io
+  registry: us-central1-docker.pkg.dev/polished-enigma-247013/images
   # -- Image name
   repository: garner-ssh-gateway
   # -- Image pull policy

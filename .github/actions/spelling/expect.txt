@@ -1,3 +1,4 @@
+amd
 apk
 Cloudant
 google
@@ -5,6 +6,7 @@ Hmac
 jsoref
 Jwt
 kubernetes
+linux
 Mailchimp
 nindent
 openssh

@@ -1,0 +1,52 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  image_name: "garner-ssh-gateway"
+  PLATFORMS: "linux/amd64,linux/arm64"
+
+concurrency:
+  group: "${{ github.workflow_ref }}-${{ github.event_name }}-${{ github.actor_id }}"
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: Build
+    if: github.event_name == 'pull_request' || !contains(github.actor, 'Garner')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        id: auth-work-identity
+        uses: "google-github-actions/auth@v2"
+        with:
+          workload_identity_provider: "projects/552057127791/locations/global/workloadIdentityPools/github/providers/github"
+          service_account: "container-builder@helical-crowbar-220917.iam.gserviceaccount.com"
+
+      - name: Publish image
+        uses: garnercorp/build-actions/image@main
+        id: publish-image
+        with:
+          container-registry: ${{ secrets.CONTAINER_REGISTRY }}
+          container-project: ${{ secrets.PROJECT_ID }}
+          platforms: ${{ env.PLATFORMS }}
+          image-name: ${{ env.image_name }}
+          additional-image-tags: >-
+            ${{ github.event_name == 'push' && format('{0}/{1}:latest', secrets.ARTIFACT_REPOSITORY_1, env.image_name) || '' }}
+            ${{ github.event_name == 'push' && format('{0}/{1}:latest', secrets.ARTIFACT_REPOSITORY_2, env.image_name) || '' }}
+            ${{ github.event_name == 'push' && format('{0}/{1}:prod-{2}', secrets.ARTIFACT_REPOSITORY_1, env.image_name, github.sha) || '' }}
+            ${{ github.event_name == 'push' && format('{0}/{1}:prod-{2}', secrets.ARTIFACT_REPOSITORY_2, env.image_name, github.sha) || '' }}
+            ${{ secrets.ARTIFACT_REPOSITORY_1 }}/${{ env.image_name }}:rc-${{ github.sha }}
+            ${{ secrets.ARTIFACT_REPOSITORY_2 }}/${{ env.image_name }}:rc-${{ github.sha }}
