@@ -26,11 +26,11 @@ jobs:
       id-token: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Authenticate to Google Cloud
         id: auth-work-identity
-        uses: "google-github-actions/auth@v2"
+        uses: "google-github-actions/auth@v3"
         with:
           workload_identity_provider: "projects/552057127791/locations/global/workloadIdentityPools/github/providers/github"
           service_account: "container-builder@helical-crowbar-220917.iam.gserviceaccount.com"
