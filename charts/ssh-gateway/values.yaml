@@ -5,6 +5,8 @@ deployment:
   annotations: {}
   # -- Pod annotations
   podAnnotations: {}
+  # -- Pod runtime class name
+  runtimeClassName: ""
 # -- Extra selectors for your something
 selectorLabels: {}
 service:
