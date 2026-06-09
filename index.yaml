@@ -14,4 +14,17 @@ entries:
     urls:
     - https://github.com/GarnerCorp/ssh-gateway-helm/releases/download/ssh-gateway-0.0.2/ssh-gateway-0.0.2.tgz
     version: 0.0.2
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2026-06-09T15:02:30.000000000Z"
+    description: SSH Gateway to expose remote service to cluster
+    digest: 711b73862d07741e384885d1df382246141584f8b417c02c8b2d4c0bc91d71da
+    icon: https://raw.githubusercontent.com/GarnerCorp/ssh-gateway-helm/art/icons/ssh-gateway.png
+    maintainers:
+    - email: jsoref@users.noreply.github.com
+      name: jsoref
+    name: ssh-gateway
+    urls:
+    - https://github.com/GarnerCorp/ssh-gateway-helm/releases/download/ssh-gateway-0.0.4/ssh-gateway-0.0.4.tgz
+    version: 0.0.4
 generated: "0001-01-01T00:00:00Z"
